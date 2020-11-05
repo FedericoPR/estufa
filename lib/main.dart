@@ -54,29 +54,29 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Sateful widget'),
-        ),
-        body: Center(
-            child:
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 20.0),
-                  padding: EdgeInsets.all(100.0),
-                  child:
-                  Text(texto['nombre']),
-
-                ),
-                Container(
-                  child:
-                  Text(texto['estado']['temp'].toString()),
-                )
-              ],
-            )
-        ),
+          body: Center(
+              child: ListView(
+                children: [
+                Text(texto['nombre'],style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold)),
+               SfRadialGauge(
+                axes: <RadialAxis>[
+                    RadialAxis(minimum: 0, maximum: double.parse(texto['estado']['maxtemp'].toString()),
+                    ranges: <GaugeRange>[
+                      GaugeRange(startValue: 0, endValue: 30, color:Colors.green),
+                      GaugeRange(startValue: 30,endValue: 70,color: Colors.orange),
+                      GaugeRange(startValue: 70,endValue: 100,color: Colors.red)],
+                    pointers: <GaugePointer>[
+                      NeedlePointer(value: double.parse(texto['estado']['temp'].toString()))],
+                    annotations: <GaugeAnnotation>[
+                      GaugeAnnotation(widget: Container(child:
+                      Text(texto['estado']['temp'].toString(),style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+                          angle: 90, positionFactor: 0.5
+                      )]
+                )])
+                ],
+              ),
+          ),
       ),
     );
   }
