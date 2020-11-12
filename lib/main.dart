@@ -21,6 +21,8 @@ class MyAppState extends State<MyApp> {
 
   var texto;
   final myController = TextEditingController();
+  double _currentSliderValue = 20;
+  var jsonload;
 
   Future<String> consultar() async{
 
@@ -38,7 +40,13 @@ class MyAppState extends State<MyApp> {
     return js;
 
   }
-
+  /*
+  modificar() async{
+    print("Lanzar la peticion");
+    jsonload = json.encode(texto);
+    var respuesta = await http.get("http://192.168.43.29:8008/set/"+jsonload);
+  }
+  */
   MyAppState(){
     print("Costructor del State");
     consultar().then(
@@ -70,10 +78,24 @@ class MyAppState extends State<MyApp> {
                       NeedlePointer(value: double.parse(texto['estado']['temp'].toString()))],
                     annotations: <GaugeAnnotation>[
                       GaugeAnnotation(widget: Container(child:
-                      Text(texto['estado']['temp'].toString(),style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
-                          angle: 90, positionFactor: 0.5
+                       Text(texto['estado']['temp'].toString(),style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold))),
+
+                           angle: 90, positionFactor: 0.5
                       )]
-                )])
+                )]),
+                Slider(
+                  value: double.parse(texto['estado']['temp'].toString()),
+                  min: 0,
+                  max: double.parse(texto['estado']['maxtemp'].toString()),
+                  divisions: 100,
+                  label: texto['estado']['temp'].toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      texto['estado']['temp']=value;
+                      texto['estado']['temp']=double.parse(texto['estado']['temp'].toStringAsFixed(1));
+                    });
+                  },
+                )
                 ],
               ),
           ),
